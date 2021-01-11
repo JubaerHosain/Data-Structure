@@ -4,10 +4,10 @@ import java.util.HashMap;
 public class Main {
     static class TrieNode {
         Map<Character, TrieNode> children;
-        boolean ennOfWord;
+        boolean endOfWord;
         public TrieNode() {
             children = new HashMap<>();
-            ennOfWord = false;
+            endOfWord = false;
         }
     }
     
@@ -24,13 +24,13 @@ public class Main {
             curr = node;
         }
         
-        curr.ennOfWord = true;
+        curr.endOfWord = true;
     }
     
     //Insert by recursion
     public static void insert(TrieNode root, String word, int index) {
         if(index == word.length()) {
-            root.ennOfWord = true;
+            root.endOfWord = true;
             return;
         }
         
@@ -56,13 +56,13 @@ public class Main {
             curr = node;
         }
         
-        return curr.ennOfWord;
+        return curr.endOfWord;
     }
     
     //Search by recursion
     public static boolean search(TrieNode root, String word, int index) {
         if(index == word.length()) {
-            return root.ennOfWord;
+            return root.endOfWord;
         }
         
         char ch = word.charAt(index);
@@ -73,28 +73,51 @@ public class Main {
         
         return search(node, word, index+1);
     }
+	
+	public static boolean delete(TrieNode root, String word, int index) {
+	    if(index == word.length()) {
+	        if(!root.endOfWord) {
+	            return false;
+	        }
+	        root.endOfWord = false;
+	        return root.children.size() == 0;
+	    }
+	    
+	    char ch = word.charAt(index);
+	    TrieNode node = root.children.get(ch);
+	    if(node == null) {
+	        return false;
+	    }
+	    
+	    if(delete(node, word, index+1)) {
+	        root.children.remove(ch);
+	        return (root.children.size() == 0) && !root.endOfWord;
+	    }
+	    
+	    return false;
+	}
     
 	public static void main(String[] args) {
 	    System.out.println("Hello Jubaer Hosain");
 	    
 	    TrieNode root = new TrieNode();
-	    String keys[] = {"Habibur", "Jubaer", "Sajidur", "Mahbubur", "Khatibun", "Ruhunnahar", "Kushnahar", "Nilima"};
+	    String keys[] = {"Habibur", "Habib", "Sajidur", "Mahbubur", "Khatibun", "Ruhunnahar", "Kushnahar", "Nilima"};
 	    for(String word: keys) {
 	        insert(root, word);
 	    }
 	    
+	    delete(root, "Habibur", 0);
 	    String word = "Habibur";
 	    System.out.println(word + " " + search(root, word));
 	    word = "Habib";
 	    System.out.println(word + " " + search(root, word));
 	    word = "Habibur Rahman";
 	    System.out.println(word + " " + search(root, word));
+	    delete(root, "Nilima", 0);
 	    word = "Nilima";
 	    System.out.println(word + " " + search(root, word));
+	    
+	    //delete(root, "Nilima", 0);
 	}
 }
-
-
-
-
 
