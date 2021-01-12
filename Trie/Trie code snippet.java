@@ -3,8 +3,8 @@ import java.util.HashMap;
 
 public class Main {
     static class TrieNode {
+	boolean endOfWord;
         Map<Character, TrieNode> children;
-        boolean endOfWord;
         public TrieNode() {
             children = new HashMap<>();
             endOfWord = false;
